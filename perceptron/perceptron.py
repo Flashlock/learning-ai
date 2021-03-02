@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 class Perceptron(object):
     """
@@ -81,7 +82,21 @@ class Perceptron(object):
 
 
 perceptron = Perceptron()
-training_vectors=np.array([[1, 2],[3, 4], [5, 6], [-1, 2], [-3, -4], [-5, -6]])
+training_vectors=np.array([[1, 10],[3, 20], [5, 25], [-1, 15], [-3, -20], [-5, -24]])
 target_values=np.array([1, 1, 1, -1, -1, -1])
 perceptron.fit(training_vectors, target_values)
-print(perceptron.errors)
+
+x = [coord[0] for coord in training_vectors]
+y = [coord[1] for coord in training_vectors]
+plt.scatter(x, y)
+
+p_line_x = list()
+p_line_y = list()
+for i in range(-3, 3):
+    p_line_x.append(i)
+    y = (perceptron.weights[0] + perceptron.weights[1] * i) / perceptron.weights[2]
+    p_line_y.append(y)
+
+plt.scatter(p_line_x, p_line_y, color='red')
+
+plt.savefig('test.png', bbox_inches='tight')
