@@ -37,6 +37,7 @@ class Perceptron(object):
         self.learning_rate = learning_rate
         self.iterations = iterations
         self.start_seed = start_seed
+        self.plot_count = 0
 
     def fit(self, training_vectors, target_values):
         # training vectors is the array of x's
@@ -70,6 +71,9 @@ class Perceptron(object):
             # break for perfection
             if(errors == 0):
                 break
+            else:
+                # plot the mistakes
+                self.plot2D(training_vectors)
 
     # determines the net input for some x
     def net_input(self, x):
@@ -79,24 +83,29 @@ class Perceptron(object):
     def predict(self, x):
         return np.where(self.net_input(x) >= 0.0, 1, -1)
 
+    def plot2D(self, training_vectors):
+        plt.figure(self.plot_count)
+        x = [coord[0] for coord in training_vectors]
+        y = [coord[1] for coord in training_vectors]
+        plt.scatter(x, y)
+        p_line_x = list()
+        p_line_y = list()
+        for i in range(-3, 3):
+            p_line_x.append(i)
+            y = (perceptron.weights[0] + perceptron.weights[1] * i) / perceptron.weights[2]
+            p_line_y.append(y)
+
+        plt.plot(p_line_x, p_line_y, color='red')
+
+        plt.savefig('test{}.png'.format(str(self.plot_count)), bbox_inches='tight')
+        self.plot_count += 1
 
 
-perceptron = Perceptron()
+
+perceptron = Perceptron(start_seed=2000)
 training_vectors=np.array([[1, 10],[3, 20], [5, 25], [-1, 15], [-3, -20], [-5, -24]])
 target_values=np.array([1, 1, 1, -1, -1, -1])
 perceptron.fit(training_vectors, target_values)
+print(perceptron.errors)
 
-x = [coord[0] for coord in training_vectors]
-y = [coord[1] for coord in training_vectors]
-plt.scatter(x, y)
-
-p_line_x = list()
-p_line_y = list()
-for i in range(-3, 3):
-    p_line_x.append(i)
-    y = (perceptron.weights[0] + perceptron.weights[1] * i) / perceptron.weights[2]
-    p_line_y.append(y)
-
-plt.scatter(p_line_x, p_line_y, color='red')
-
-plt.savefig('test.png', bbox_inches='tight')
+perceptron.plot2D(training_vectors)
