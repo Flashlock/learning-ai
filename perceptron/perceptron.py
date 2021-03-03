@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 class Perceptron(object):
     """
@@ -18,8 +17,6 @@ class Perceptron(object):
             x1 to xn represent the coordinates for this point.
             there will be an array of x's inputed
     """
-
-
     # constant multiplier
     learning_rate: float
     # how many times to iterate over dataset
@@ -71,9 +68,6 @@ class Perceptron(object):
             # break for perfection
             if(errors == 0):
                 break
-            else:
-                # plot the mistakes
-                self.plot2D(training_vectors)
 
     # determines the net input for some x
     def net_input(self, x):
@@ -82,30 +76,3 @@ class Perceptron(object):
     # makes a prediction for some x
     def predict(self, x):
         return np.where(self.net_input(x) >= 0.0, 1, -1)
-
-    def plot2D(self, training_vectors):
-        plt.figure(self.plot_count)
-        x = [coord[0] for coord in training_vectors]
-        y = [coord[1] for coord in training_vectors]
-        plt.scatter(x, y)
-        p_line_x = list()
-        p_line_y = list()
-        for i in range(-3, 3):
-            p_line_x.append(i)
-            y = (perceptron.weights[0] + perceptron.weights[1] * i) / perceptron.weights[2]
-            p_line_y.append(y)
-
-        plt.plot(p_line_x, p_line_y, color='red')
-
-        plt.savefig('test{}.png'.format(str(self.plot_count)), bbox_inches='tight')
-        self.plot_count += 1
-
-
-
-perceptron = Perceptron(start_seed=2000)
-training_vectors=np.array([[1, 10],[3, 20], [5, 25], [-1, 15], [-3, -20], [-5, -24]])
-target_values=np.array([1, 1, 1, -1, -1, -1])
-perceptron.fit(training_vectors, target_values)
-print(perceptron.errors)
-
-perceptron.plot2D(training_vectors)
